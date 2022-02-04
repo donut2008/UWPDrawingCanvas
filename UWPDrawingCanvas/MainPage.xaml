@@ -35,17 +35,18 @@
                     Style="{StaticResource CaptionTextBlockStyle}" />
                 </StackPanel>
             </Border>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5">
-                <InkToolbar HorizontalAlignment="Center" TargetInkCanvas="{x:Bind DrawingCanvas}"></InkToolbar>
-                <Button VerticalAlignment="Center" HorizontalAlignment="Right" ToolTipService.ToolTip="Save" Click="SaveClick">
-                    <SymbolIcon Symbol="Save"/>
-                </Button>
-                <Button VerticalAlignment="Center" HorizontalAlignment="Right" ToolTipService.ToolTip="Settings" Click="SettingsClick">
-                    <SymbolIcon Symbol="Setting"/>
-                </Button>
-            </StackPanel>
+            <CommandBar OverflowButtonVisibility="Collapsed">
+                <CommandBar.Content>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <InkToolbar HorizontalAlignment="Center" TargetInkCanvas="{x:Bind DrawingCanvas}"></InkToolbar>
+                    </StackPanel>
+                </CommandBar.Content>
+                <AppBarSeparator/>
+                <AppBarButton Icon="Save" ToolTipService.ToolTip="Save" Click="SaveClick"/>
+                <AppBarButton Icon="Setting" ToolTipService.ToolTip="Settings" Click="SettingsClick"/>
+            </CommandBar>
         </StackPanel>
-        <Grid Margin="0,85,0,0" Background="{ThemeResource SystemBaseLowColor}" CornerRadius="8">
+        <Grid Margin="0,81,0,0" Background="{ThemeResource SystemBaseLowColor}">
             <InkCanvas x:Name="DrawingCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></InkCanvas>
         </Grid>
     </Grid>
