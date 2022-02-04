@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+    xmlns:animatedvisuals="using:Microsoft.UI.Xaml.Controls.AnimatedVisuals"
     controls:BackdropMaterial.ApplyToRootOrPageBackground="True">
     <Page.Resources>
         <!--This top margin is the height of the custom TitleBar-->
@@ -24,13 +25,13 @@
                 <StackPanel Orientation="Horizontal">
                     <Image x:Name="AppFontIcon"
                     HorizontalAlignment="Left" 
-                    VerticalAlignment="Center"
-                    Source="Assets/StoreLogo.scale-100.png" 
+                    VerticalAlignment="Top"
+                    Source="Assets/StoreLogo.scale-200.png" 
                     Width="16" 
                     Height="16"/>
                     <TextBlock x:Name="AppTitle"
                     Text="Drawing Canvas"
-                    VerticalAlignment="Center"
+                    VerticalAlignment="Top"
                     Margin="12, 0, 0, 0"
                     Style="{StaticResource CaptionTextBlockStyle}" />
                 </StackPanel>

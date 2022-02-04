@@ -11,32 +11,28 @@
     <Grid>
         <StackPanel Orientation="Vertical">
             <Border x:Name="AppTitleBar"
-                IsHitTestVisible="True"
                 VerticalAlignment="Top"
                 Background="Transparent"
+                IsHitTestVisible="True"
                 Height="40"
                 Canvas.ZIndex="1" 
                 Margin="16,8,0,0">
                 <StackPanel Orientation="Horizontal">
                     <Image x:Name="AppFontIcon"
                     HorizontalAlignment="Left" 
-                    VerticalAlignment="Center"
-                    Source="Assets/Square44x44Logo.png" 
+                    VerticalAlignment="Top"
+                    Source="Assets/StoreLogo.scale-200.png" 
                     Width="16" 
                     Height="16"/>
                     <TextBlock x:Name="AppTitle"
                     Text="Drawing Canvas"
-                    VerticalAlignment="Center"
+                    VerticalAlignment="Top"
                     Margin="12, 0, 0, 0"
                     Style="{StaticResource CaptionTextBlockStyle}" />
                 </StackPanel>
             </Border>
             <StackPanel Orientation="Horizontal" Margin="5" Spacing="5">
-                <Button x:Name="BackButton" 
-                        HorizontalAlignment="Left" 
-                        VerticalAlignment="Center"
-                        ToolTipService.ToolTip="Back"
-                        Click="BackButton_Click">
+                <Button x:Name="BackButton" ToolTipService.ToolTip="Back" Click="BackButton_Click">
                     <SymbolIcon Symbol="Back"/>
                 </Button>
                 <TextBlock Style="{StaticResource TitleTextBlockStyle}" Margin="8" VerticalAlignment="Center">Settings</TextBlock>
@@ -69,7 +65,7 @@
                 <controls:Expander.Content>
                     <StackPanel>
                         <TextBlock FontSize="16">A UWP drawing canvas written in C#.</TextBlock>
-                        <TextBlock FontSize="12" Foreground="{ThemeResource SystemBaseMediumColor}">Build info: 1.1.102c release_canary</TextBlock>
+                        <TextBlock FontSize="12" Foreground="{ThemeResource SystemBaseMediumColor}">Build info: 1.1.112c release_canary</TextBlock>
                     </StackPanel>
                 </controls:Expander.Content>
             </controls:Expander>
