@@ -23,6 +23,8 @@ using Windows.Storage;
 using Microsoft.Graphics.Canvas;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
+using Windows.UI.Xaml.Media.Imaging;
+using System.Threading.Tasks;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -86,7 +88,7 @@ namespace UWPDrawingCanvas
                 AppTitle.Foreground = defaultForegroundBrush;
             }
         }
-        private async void SaveClick(object sender, RoutedEventArgs e)
+        /* private async void SaveClick(object sender, RoutedEventArgs e)
         {
             IReadOnlyList<InkStroke> currentStrokes = DrawingCanvas.InkPresenter.StrokeContainer.GetStrokes();
             CanvasDevice device = CanvasDevice.GetSharedDevice();
@@ -117,7 +119,6 @@ namespace UWPDrawingCanvas
                     }
                     stream.Dispose();
                     Windows.Storage.Provider.FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
-
                     if (status == Windows.Storage.Provider.FileUpdateStatus.Complete)
                     {
                         ContentDialog FileSaved = new ContentDialog()
@@ -147,6 +148,70 @@ namespace UWPDrawingCanvas
                     };
                 }
             }
+        } */
+        private byte[] ConvertInkCanvasToByteArray()
+        {
+            var canvasStrokes = DrawingCanvas.InkPresenter.StrokeContainer.GetStrokes();
+
+            if (canvasStrokes.Count > 0)
+            {
+                var width = (int)DrawingCanvas.ActualWidth;
+                var height = (int)DrawingCanvas.ActualHeight;
+                var device = CanvasDevice.GetSharedDevice();
+                var renderTarget = new CanvasRenderTarget(device, width,
+                    height, 96);
+
+                using (var ds = renderTarget.CreateDrawingSession())
+                {
+                    ds.Clear(Windows.UI.Colors.White);
+                    ds.DrawInk(DrawingCanvas.InkPresenter.StrokeContainer.GetStrokes());
+                }
+
+                return renderTarget.GetPixelBytes();
+            }
+            else
+            {
+                return null;
+            }
+        }
+        private WriteableBitmap GetSignatureBitmapFull()
+        {
+            var bytes = ConvertInkCanvasToByteArray();
+
+            if (bytes != null)
+            {
+                var width = (int)DrawingCanvas.ActualWidth;
+                var height = (int)DrawingCanvas.ActualHeight;
+
+                var bmp = new WriteableBitmap(width, height);
+                using (var stream = bmp.PixelBuffer.AsStream())
+                {
+                    stream.Write(bytes, 0, bytes.Length);
+                    return bmp;
+                }
+            }
+            else
+                return null;
+        }
+
+        private async Task<WriteableBitmap> GetSignatureBitmapFullAsync()
+        {
+            var bytes = ConvertInkCanvasToByteArray();
+
+            if (bytes != null)
+            {
+                var width = (int)DrawingCanvas.ActualWidth;
+                var height = (int)DrawingCanvas.ActualHeight;
+
+                var bmp = new WriteableBitmap(width, height);
+                using (var stream = bmp.PixelBuffer.AsStream())
+                {
+                    await stream.WriteAsync(bytes, 0, bytes.Length);
+                    return bmp;
+                }
+            }
+            else
+                return null;
         }
         private void SettingsClick(object sender, RoutedEventArgs e)
         {
