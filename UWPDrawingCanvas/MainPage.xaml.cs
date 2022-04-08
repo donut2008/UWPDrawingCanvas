@@ -23,8 +23,6 @@ using Windows.Storage;
 using Microsoft.Graphics.Canvas;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
-using Windows.UI.Xaml.Media.Imaging;
-using System.Threading.Tasks;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -88,13 +86,13 @@ namespace UWPDrawingCanvas
                 AppTitle.Foreground = defaultForegroundBrush;
             }
         }
-        /* private async void SaveClick(object sender, RoutedEventArgs e)
+        private async void SaveClick(object sender, RoutedEventArgs e)
         {
             IReadOnlyList<InkStroke> currentStrokes = DrawingCanvas.InkPresenter.StrokeContainer.GetStrokes();
             CanvasDevice device = CanvasDevice.GetSharedDevice();
             CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, (int)DrawingCanvas.ActualWidth, (int)DrawingCanvas.ActualHeight, 96);
-            var SaveDrawing = new Windows.Storage.Pickers.FileSavePicker();
-            SaveDrawing.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
+            var SaveDrawing = new FileSavePicker();
+            SaveDrawing.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
             SaveDrawing.SuggestedFileName = "Untitled drawing";
             if (currentStrokes.Count > 0)
             {
@@ -102,15 +100,13 @@ namespace UWPDrawingCanvas
                 // Initialize the picker.
                 FileSavePicker savePicker = new FileSavePicker();
                 savePicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-                savePicker.FileTypeChoices.Add(
-                    "Portable Network Graphics",
-                    new List<string>() { ".png" });
+                savePicker.FileTypeChoices.Add("Portable Network Graphics Image", new List<string>() { ".png",".jpeg",".jpg",".bmp" });
                 savePicker.DefaultFileExtension = ".png";
                 savePicker.SuggestedFileName = "Untitled drawing";
                 StorageFile file = await savePicker.PickSaveFileAsync();
                 if (file != null)
                 {
-                    Windows.Storage.CachedFileManager.DeferUpdates(file);
+                    CachedFileManager.DeferUpdates(file);
                     IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite);
                     using (IOutputStream outputStream = stream.GetOutputStreamAt(0))
                     {
@@ -148,70 +144,6 @@ namespace UWPDrawingCanvas
                     };
                 }
             }
-        } */
-        private byte[] ConvertInkCanvasToByteArray()
-        {
-            var canvasStrokes = DrawingCanvas.InkPresenter.StrokeContainer.GetStrokes();
-
-            if (canvasStrokes.Count > 0)
-            {
-                var width = (int)DrawingCanvas.ActualWidth;
-                var height = (int)DrawingCanvas.ActualHeight;
-                var device = CanvasDevice.GetSharedDevice();
-                var renderTarget = new CanvasRenderTarget(device, width,
-                    height, 96);
-
-                using (var ds = renderTarget.CreateDrawingSession())
-                {
-                    ds.Clear(Windows.UI.Colors.White);
-                    ds.DrawInk(DrawingCanvas.InkPresenter.StrokeContainer.GetStrokes());
-                }
-
-                return renderTarget.GetPixelBytes();
-            }
-            else
-            {
-                return null;
-            }
-        }
-        private WriteableBitmap GetSignatureBitmapFull()
-        {
-            var bytes = ConvertInkCanvasToByteArray();
-
-            if (bytes != null)
-            {
-                var width = (int)DrawingCanvas.ActualWidth;
-                var height = (int)DrawingCanvas.ActualHeight;
-
-                var bmp = new WriteableBitmap(width, height);
-                using (var stream = bmp.PixelBuffer.AsStream())
-                {
-                    stream.Write(bytes, 0, bytes.Length);
-                    return bmp;
-                }
-            }
-            else
-                return null;
-        }
-
-        private async Task<WriteableBitmap> GetSignatureBitmapFullAsync()
-        {
-            var bytes = ConvertInkCanvasToByteArray();
-
-            if (bytes != null)
-            {
-                var width = (int)DrawingCanvas.ActualWidth;
-                var height = (int)DrawingCanvas.ActualHeight;
-
-                var bmp = new WriteableBitmap(width, height);
-                using (var stream = bmp.PixelBuffer.AsStream())
-                {
-                    await stream.WriteAsync(bytes, 0, bytes.Length);
-                    return bmp;
-                }
-            }
-            else
-                return null;
         }
         private void SettingsClick(object sender, RoutedEventArgs e)
         {

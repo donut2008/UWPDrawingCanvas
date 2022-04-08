@@ -10,38 +10,38 @@
     controls:BackdropMaterial.ApplyToRootOrPageBackground="True">
     <Grid>
         <StackPanel Orientation="Vertical">
-            <Border x:Name="AppTitleBar"
+            <StackPanel Orientation="Horizontal" Margin="5" Spacing="5">
+                <Button x:Name="BackButton" 
+                        HorizontalAlignment="Left" 
+                        VerticalAlignment="Top"
+                        ToolTipService.ToolTip="Back"
+                        Click="BackButton_Click">
+                    <SymbolIcon Symbol="Back"/>
+                </Button>
+                <Border x:Name="AppTitleBar"
                 IsHitTestVisible="True"
                 VerticalAlignment="Top"
                 Background="Transparent"
                 Height="40"
                 Canvas.ZIndex="1" 
                 Margin="16,8,0,0">
-                <StackPanel Orientation="Horizontal">
-                    <Image x:Name="AppFontIcon"
+                    <StackPanel Orientation="Horizontal">
+                        <Image x:Name="AppFontIcon"
                     HorizontalAlignment="Left" 
-                    VerticalAlignment="Center"
+                    VerticalAlignment="Top"
                     Source="Assets/Square44x44Logo.png" 
                     Width="16" 
                     Height="16"/>
-                    <TextBlock x:Name="AppTitle"
+                        <TextBlock x:Name="AppTitle"
                     Text="Drawing Canvas UWP"
-                    VerticalAlignment="Center"
+                    VerticalAlignment="Top"
                     Margin="12, 0, 0, 0"
                     Style="{StaticResource CaptionTextBlockStyle}" />
-                </StackPanel>
-            </Border>
-            <StackPanel Orientation="Horizontal" Margin="5" Spacing="5">
-                <Button x:Name="BackButton" 
-                        HorizontalAlignment="Left" 
-                        VerticalAlignment="Center"
-                        ToolTipService.ToolTip="Back"
-                        Click="BackButton_Click">
-                    <SymbolIcon Symbol="Back"/>
-                </Button>
-                <TextBlock Style="{StaticResource TitleTextBlockStyle}" Margin="8" VerticalAlignment="Center">Settings</TextBlock>
+                    </StackPanel>
+                </Border>
             </StackPanel>
-            <controls:Expander CornerRadius="8" Margin="8" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Margin="8" VerticalAlignment="Center">Settings</TextBlock>
+                <controls:Expander CornerRadius="8" Margin="8" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
                 <controls:Expander.Header>
                     <StackPanel Spacing="10" Margin="0,10">
                         <TextBlock FontSize="16">App theme</TextBlock>
@@ -69,7 +69,7 @@
                 <controls:Expander.Content>
                     <StackPanel>
                         <TextBlock FontSize="16">A UWP drawing canvas.</TextBlock>
-                        <TextBlock FontSize="12" Foreground="{ThemeResource SystemBaseMediumColor}">Build info: 1.1 build 71, canary channel</TextBlock>
+                        <TextBlock FontSize="12" Foreground="{ThemeResource SystemBaseMediumColor}">Build info: 1.1 build 82, canary channel</TextBlock>
                     </StackPanel>
                 </controls:Expander.Content>
             </controls:Expander>

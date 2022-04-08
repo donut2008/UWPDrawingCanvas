@@ -58,10 +58,6 @@ namespace UWPDrawingCanvas
         {
             (Window.Current.Content as FrameworkElement).RequestedTheme = ElementTheme.Default;
         }
-        private void BackButton_PointerExited(object sender, PointerRoutedEventArgs e)
-        {
-            muxc.AnimatedIcon.SetState((UIElement)sender, "Normal");
-        }
         private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
         {
             UpdateTitleBarLayout(sender);
