@@ -91,8 +91,8 @@ namespace UWPDrawingCanvas
             IReadOnlyList<InkStroke> currentStrokes = DrawingCanvas.InkPresenter.StrokeContainer.GetStrokes();
             CanvasDevice device = CanvasDevice.GetSharedDevice();
             CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, (int)DrawingCanvas.ActualWidth, (int)DrawingCanvas.ActualHeight, 96);
-            var SaveDrawing = new Windows.Storage.Pickers.FileSavePicker();
-            SaveDrawing.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.PicturesLibrary;
+            var SaveDrawing = new FileSavePicker();
+            SaveDrawing.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
             SaveDrawing.SuggestedFileName = "Untitled drawing";
             if (currentStrokes.Count > 0)
             {
@@ -100,15 +100,13 @@ namespace UWPDrawingCanvas
                 // Initialize the picker.
                 FileSavePicker savePicker = new FileSavePicker();
                 savePicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-                savePicker.FileTypeChoices.Add(
-                    "Portable Network Graphics",
-                    new List<string>() { ".png" });
+                savePicker.FileTypeChoices.Add("Portable Network Graphics Image", new List<string>() { ".png",".jpeg",".jpg",".bmp" });
                 savePicker.DefaultFileExtension = ".png";
                 savePicker.SuggestedFileName = "Untitled drawing";
                 StorageFile file = await savePicker.PickSaveFileAsync();
                 if (file != null)
                 {
-                    Windows.Storage.CachedFileManager.DeferUpdates(file);
+                    CachedFileManager.DeferUpdates(file);
                     IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite);
                     using (IOutputStream outputStream = stream.GetOutputStreamAt(0))
                     {
@@ -117,7 +115,6 @@ namespace UWPDrawingCanvas
                     }
                     stream.Dispose();
                     Windows.Storage.Provider.FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
-
                     if (status == Windows.Storage.Provider.FileUpdateStatus.Complete)
                     {
                         ContentDialog FileSaved = new ContentDialog()
