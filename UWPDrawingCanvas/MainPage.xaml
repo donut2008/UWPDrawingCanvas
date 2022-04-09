@@ -11,6 +11,27 @@
     <Page.Resources>
         <!--This top margin is the height of the custom TitleBar-->
         <Thickness x:Key="NavigationViewContentMargin">0,48,0,0</Thickness>
+        <!-- Add the custom CalligraphicPen to the page resources. -->
+        <local:CalligraphicPen x:Key="CalligraphicPen" />
+        <!-- Specify the colors for the palette of the custom pen. -->
+        <BrushCollection x:Key="CalligraphicPenPalette">
+            <SolidColorBrush Color="Blue" />
+            <SolidColorBrush Color="Red" />
+            <SolidColorBrush Color="Orange"/>
+            <SolidColorBrush Color="Green"/>
+            <SolidColorBrush Color="Lime"/>
+            <SolidColorBrush Color="Black"/>
+            <SolidColorBrush Color="White"/>
+            <SolidColorBrush Color="Cyan"/>
+            <SolidColorBrush Color="Gray"/>
+            <SolidColorBrush Color="LightGray"/>
+            <SolidColorBrush Color="Yellow"/>
+            <SolidColorBrush Color="GreenYellow"/>
+            <SolidColorBrush Color="YellowGreen"/>
+            <SolidColorBrush Color="OrangeRed"/>
+            <SolidColorBrush Color="Brown"/>
+            <SolidColorBrush Color="Chocolate"/>
+        </BrushCollection>
     </Page.Resources>
     <Grid>
         <StackPanel>
@@ -29,14 +50,25 @@
                     Width="16" 
                     Height="16"/>
                     <TextBlock x:Name="AppTitle"
-                    Text="Drawing Canvas UWP"
+                    Text="Drawing Canvas"
                     VerticalAlignment="Top"
                     Margin="12, 0, 0, 0"
                     Style="{StaticResource CaptionTextBlockStyle}" />
                 </StackPanel>
             </Border>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5">
-                <InkToolbar HorizontalAlignment="Center" TargetInkCanvas="{x:Bind DrawingCanvas}"></InkToolbar>
+                <InkToolbar HorizontalAlignment="Center" TargetInkCanvas="{x:Bind DrawingCanvas}">
+                    <InkToolbarCustomPenButton
+            CustomPen="{StaticResource CalligraphicPen}"
+            Palette="{StaticResource CalligraphicPenPalette}"
+            MinStrokeWidth="1" MaxStrokeWidth="3" SelectedStrokeWidth="2"
+            SelectedBrushIndex ="1">
+                        <SymbolIcon Symbol="Favorite" />
+                        <InkToolbarCustomPenButton.ConfigurationContent>
+                            <InkToolbarPenConfigurationControl />
+                        </InkToolbarCustomPenButton.ConfigurationContent>
+                    </InkToolbarCustomPenButton>
+                </InkToolbar>
                 <Button VerticalAlignment="Center" HorizontalAlignment="Right" ToolTipService.ToolTip="Save" Click="SaveClick">
                     <SymbolIcon Symbol="Save"/>
                 </Button>
@@ -45,6 +77,26 @@
                 </Button>
             </StackPanel>
         </StackPanel>
+        <ContentDialog>
+            <ContentDialog.Title>
+                <TextBlock>Pick dimensions of image</TextBlock>
+            </ContentDialog.Title>
+            <ContentDialog.Content>
+                <StackPanel Orientation="Vertical">
+                    <ComboBox x:Name="DefaultSizesBox" SelectionChanged="DefaultSizeSelected" SelectedIndex="2">
+                        <x:String>4320p (7680x4320)</x:String>
+                        <x:String>2160p (3840x2160)</x:String>
+                        <x:String>1080p (1920x1080)</x:String>
+                        <x:String>720p (1280x720)</x:String>
+                        <x:String>540p (960x540)</x:String>
+                    </ComboBox>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Checked="CustomSizeEnabled" Unchecked="CustomSizeDisabled"/>
+                        <TextBlock>Use a custom size (may break some drawings!)</TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </ContentDialog.Content>
+        </ContentDialog>
         <Grid Margin="0,85,0,0" Background="{ThemeResource SystemBaseLowColor}" CornerRadius="8">
             <InkCanvas x:Name="DrawingCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></InkCanvas>
         </Grid>

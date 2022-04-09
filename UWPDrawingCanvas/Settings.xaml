@@ -41,7 +41,7 @@
                 </Border>
             </StackPanel>
             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Margin="8" VerticalAlignment="Center">Settings</TextBlock>
-                <controls:Expander CornerRadius="8" Margin="8" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+            <controls:Expander CornerRadius="8" Margin="8" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
                 <controls:Expander.Header>
                     <StackPanel Spacing="10" Margin="0,10">
                         <TextBlock FontSize="16">App theme</TextBlock>
@@ -69,7 +69,7 @@
                 <controls:Expander.Content>
                     <StackPanel>
                         <TextBlock FontSize="16">A UWP drawing canvas.</TextBlock>
-                        <TextBlock FontSize="12" Foreground="{ThemeResource SystemBaseMediumColor}">Build info: 1.1 build 82, canary channel</TextBlock>
+                        <TextBlock FontSize="12" Foreground="{ThemeResource SystemBaseMediumColor}">Build info: 2.2 build 92, canary channel</TextBlock>
                     </StackPanel>
                 </controls:Expander.Content>
             </controls:Expander>
