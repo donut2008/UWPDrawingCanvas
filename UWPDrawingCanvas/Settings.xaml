@@ -33,7 +33,7 @@
                     Width="16" 
                     Height="16"/>
                         <TextBlock x:Name="AppTitle"
-                    Text="Drawing Canvas UWP"
+                    Text="Drawing Canvas"
                     VerticalAlignment="Top"
                     Margin="12, 0, 0, 0"
                     Style="{StaticResource CaptionTextBlockStyle}" />
@@ -69,7 +69,7 @@
                 <controls:Expander.Content>
                     <StackPanel>
                         <TextBlock FontSize="16">A UWP drawing canvas.</TextBlock>
-                        <TextBlock FontSize="12" Foreground="{ThemeResource SystemBaseMediumColor}">Build info: 2.2 build 92, canary channel</TextBlock>
+                        <TextBlock FontSize="12" Foreground="{ThemeResource SystemBaseMediumColor}">Build info: 2.2 build 90, canary channel</TextBlock>
                     </StackPanel>
                 </controls:Expander.Content>
             </controls:Expander>

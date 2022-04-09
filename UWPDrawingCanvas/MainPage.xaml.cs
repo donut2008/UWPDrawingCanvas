@@ -24,7 +24,7 @@ using Microsoft.Graphics.Canvas;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Microsoft.Toolkit.Uwp.Notifications;
-using Windows.Storage.Provider;
+using Microsoft.UI.Xaml.Controls;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -35,7 +35,7 @@ namespace UWPDrawingCanvas
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        public int SaveHeight, SaveWidth;
+        public int SavingHeight, SavingWidth;
         public MainPage()
         {
             this.InitializeComponent();
@@ -64,27 +64,49 @@ namespace UWPDrawingCanvas
         }
         private void CoreTitleBar_IsVisibleChanged(CoreApplicationViewTitleBar sender, object args)
         {
-            if (sender.IsVisible) AppTitleBar.Visibility = Visibility.Visible;
-            else AppTitleBar.Visibility = Visibility.Collapsed;
+            if (sender.IsVisible)
+                AppTitleBar.Visibility = Visibility.Visible;
+            else
+                AppTitleBar.Visibility = Visibility.Collapsed;
         }
         private void Current_Activated(object sender, WindowActivatedEventArgs e)
         {
             SolidColorBrush defaultForegroundBrush = (SolidColorBrush)Application.Current.Resources["TextFillColorPrimaryBrush"];
             SolidColorBrush inactiveForegroundBrush = (SolidColorBrush)Application.Current.Resources["TextFillColorDisabledBrush"];
 
-            if (e.WindowActivationState == CoreWindowActivationState.Deactivated) AppTitle.Foreground = inactiveForegroundBrush;
-            else AppTitle.Foreground = defaultForegroundBrush;
+            if (e.WindowActivationState == CoreWindowActivationState.Deactivated)
+                AppTitle.Foreground = inactiveForegroundBrush;
+            else
+                AppTitle.Foreground = defaultForegroundBrush;
+        }
+        private void CustomWidth_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args)
+        {
+            sender.Text = new String(sender.Text.Where(char.IsDigit).ToArray());
+        }
+        private void SizeCancelled(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+            new ToastContentBuilder() .AddText("Saving cancelled");
+        }
+        private void FileSizeChosen(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+            SavingHeight = int.Parse(CustomHeight.Text); SavingWidth = int.Parse(CustomWidth.Text);
+        }
+        private void ComboBoxGone(object sender, RoutedEventArgs e)
+        {
+            CustomWidth.IsEnabled = false; CustomHeight.IsEnabled = false;
+        }
+        private void ComboBoxVisible(object sender, RoutedEventArgs e)
+        {
+            CustomWidth.IsEnabled = true; CustomHeight.IsEnabled = true;
         }
         private async void SaveClick(object sender, RoutedEventArgs e)
         {
             IReadOnlyList<InkStroke> currentStrokes = DrawingCanvas.InkPresenter.StrokeContainer.GetStrokes();
             CanvasDevice device = CanvasDevice.GetSharedDevice();
-            CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, (int)DrawingCanvas.ActualWidth, (int)DrawingCanvas.ActualHeight, 96);
-            var SaveDrawing = new FileSavePicker
-            {
-                SuggestedStartLocation = PickerLocationId.PicturesLibrary,
-                SuggestedFileName = "Untitled drawing"
-            };
+            CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, SavingHeight, SavingWidth, 96);
+            var SaveDrawing = new FileSavePicker();
+            SaveDrawing.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+            SaveDrawing.SuggestedFileName = "Untitled drawing";
             if (currentStrokes.Count > 0)
             {
                 // Let users choose their ink file using a file picker.
@@ -104,18 +126,19 @@ namespace UWPDrawingCanvas
                         await DrawingCanvas.InkPresenter.StrokeContainer.SaveAsync(outputStream);
                         await outputStream.FlushAsync();
                     }
-                    stream.Dispose();
+                        /*ContentDialog FileSaved = new ContentDialog()
                     FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
                     if (status == FileUpdateStatus.Complete)
                     {
-                        /* ContentDialog FileSaved = new ContentDialog()
+                        /*ContentDialog FileSaved = new ContentDialog()
                         {
                             Title = "File saved as " + file.Name,
                             CloseButtonText = "Close",
-                        }; */
+                        };*/
                         new ToastContentBuilder()
-                            .AddText("File saved successfully!")
-                            .AddText("Saved as " + file.Name);
+                            .AddText("File saved successfully as" + file.Name)
+                            .AddButton(new ToastButton()
+                                .SetContent("Close"));
                     }
                     else
                     {
@@ -124,10 +147,12 @@ namespace UWPDrawingCanvas
                             Title = "File wasn't saved.",
                             Content="Are you sure you have access to the current path?",
                             CloseButtonText = "Close",
-                        }; */
+                        };*/
                         new ToastContentBuilder()
-                            .AddText("Failed to save file")
-                            .AddText("Are you sure you have access to the current path?");
+                            .AddText("File could not be saved!")
+                            .AddText("Are you sure you have access to the save path?")
+                            .AddButton(new ToastButton()
+                                .SetContent("Close"));
                     }
                 }
                 // User selects Cancel and picker returns null.
@@ -138,25 +163,41 @@ namespace UWPDrawingCanvas
                     {
                         Title = "Operation cancelled by user.",
                         CloseButtonText = "Close",
-                    }; */
+                    };*/
                     new ToastContentBuilder()
-                        .AddText("Operation cancelled by user");
+                            .AddText("Saving file cancelled by user.")
+                            .AddButton(new ToastButton()
+                                .SetContent("Close"));
                 }
             }
         }
-        private void DefaultSizeSelected(object sender, SelectionChangedEventArgs e)
+        private void CustomHeight_OnBeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
-            var selectedItem = DefaultSizesBox.SelectedIndex;
-            switch(selectedItem)
-            {
-                case 0: SaveHeight = 7680; SaveWidth = 4320; break;
-                case 1: SaveHeight = 3840; SaveWidth = 2160; break;
-                case 2: SaveHeight = 1920; SaveWidth = 1080; break;
-                case 3: SaveHeight = 1280; SaveWidth = 720; break;
-                case 4: SaveHeight = 960; SaveWidth = 540; break;
-            }
+            args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
+        }
+        private void CustomHeight_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args)
+        {
+            sender.Text = new String(sender.Text.Where(char.IsDigit).ToArray());
+        }
+        private void CustomWidth_OnBeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
+        {
+            args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
         }
         private void SettingsClick(object sender, RoutedEventArgs e)
-        { this.Frame.Navigate(typeof(Settings)); }
+        {
+            this.Frame.Navigate(typeof(Settings));
+        }
+        private void CustomHeight_OnBeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
+        {
+            args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
+        }
+        private void CustomHeight_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args)
+        {
+            sender.Text = new String(sender.Text.Where(char.IsDigit).ToArray());
+        }
+        private void CustomWidth_OnBeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
+        {
+            args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
+        }
     }
 }

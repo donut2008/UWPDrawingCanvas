@@ -9,6 +9,28 @@
     xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     controls:BackdropMaterial.ApplyToRootOrPageBackground="True">
     <Page.Resources>
+        <!-- Add the custom CalligraphicPen to the page resources. -->
+        <local:CalligraphicPen x:Key="CalligraphicPen" />
+        <!-- Specify the colors for the palette of the custom pen. -->
+        <BrushCollection x:Key="CalligraphicPenPalette">
+            <SolidColorBrush Color="Blue" />
+            <SolidColorBrush Color="Red" />
+            <SolidColorBrush Color="Black"/>
+            <SolidColorBrush Color="Chocolate"/>
+            <SolidColorBrush Color="Cyan"/>
+            <SolidColorBrush Color="Olive"/>
+            <SolidColorBrush Color="White"/>
+            <SolidColorBrush Color="Green"/>
+            <SolidColorBrush Color="Lime"/>
+            <SolidColorBrush Color="Orange"/>
+            <SolidColorBrush Color="Yellow"/>
+            <SolidColorBrush Color="YellowGreen"/>
+            <SolidColorBrush Color="GreenYellow"/>
+            <SolidColorBrush Color="Pink"/>
+            <SolidColorBrush Color="Purple"/>
+            <SolidColorBrush Color="Gray"/>
+            <SolidColorBrush Color="LightGray"/>
+        </BrushCollection>
         <!--This top margin is the height of the custom TitleBar-->
         <Thickness x:Key="NavigationViewContentMargin">0,48,0,0</Thickness>
         <!-- Add the custom CalligraphicPen to the page resources. -->
@@ -59,11 +81,11 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5">
                 <InkToolbar HorizontalAlignment="Center" TargetInkCanvas="{x:Bind DrawingCanvas}">
                     <InkToolbarCustomPenButton
-            CustomPen="{StaticResource CalligraphicPen}"
-            Palette="{StaticResource CalligraphicPenPalette}"
-            MinStrokeWidth="1" MaxStrokeWidth="3" SelectedStrokeWidth="2"
-            SelectedBrushIndex ="1">
-                        <SymbolIcon Symbol="Favorite" />
+                    CustomPen="{StaticResource CalligraphicPen}"
+                    Palette="{StaticResource CalligraphicPenPalette}"
+                    MinStrokeWidth="1" MaxStrokeWidth="3" SelectedStrokeWidth="2"
+                    SelectedBrushIndex ="1">
+                        <FontIcon Glyph="&#xEDC6;" FontSize="16"/>
                         <InkToolbarCustomPenButton.ConfigurationContent>
                             <InkToolbarPenConfigurationControl />
                         </InkToolbarCustomPenButton.ConfigurationContent>
@@ -77,23 +99,26 @@
                 </Button>
             </StackPanel>
         </StackPanel>
-        <ContentDialog>
+        <ContentDialog x:Name="FileSizePicker" CloseButtonClick="SizeCancelled" PrimaryButtonClick="FileSizeChosen">
             <ContentDialog.Title>
-                <TextBlock>Pick dimensions of image</TextBlock>
+                <TextBlock>Pick file size</TextBlock>
             </ContentDialog.Title>
             <ContentDialog.Content>
                 <StackPanel Orientation="Vertical">
-                    <ComboBox x:Name="DefaultSizesBox" SelectionChanged="DefaultSizeSelected" SelectedIndex="2">
-                        <x:String>4320p (7680x4320)</x:String>
+                    <ComboBox>
+                        <x:String>4320p (7680x4230)</x:String>
                         <x:String>2160p (3840x2160)</x:String>
                         <x:String>1080p (1920x1080)</x:String>
                         <x:String>720p (1280x720)</x:String>
                         <x:String>540p (960x540)</x:String>
                     </ComboBox>
                     <StackPanel Orientation="Horizontal">
-                        <CheckBox Checked="CustomSizeEnabled" Unchecked="CustomSizeDisabled"/>
-                        <TextBlock>Use a custom size (may break some drawings!)</TextBlock>
+                        <CheckBox Checked="ComboBoxGone" Unchecked="ComboBoxVisible"/>
+                        <TextBlock Style="{StaticResource BodyTextBlockStyle}">Use a custom size (may break some drawings!)</TextBlock>
                     </StackPanel>
+                    <TextBox x:Name="CustomHeight" BeforeTextChanging="CustomHeight_OnBeforeTextChanging" TextChanging="CustomHeight_TextChanging"/>
+                    <TextBlock>x</TextBlock>
+                    <TextBox x:Name="CustomWidth" BeforeTextChanging="CustomWidth_OnBeforeTextChanging" TextChanging="CustomWidth_TextChanging"/>
                 </StackPanel>
             </ContentDialog.Content>
         </ContentDialog>
