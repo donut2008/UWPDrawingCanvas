@@ -25,6 +25,7 @@ using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Microsoft.Toolkit.Uwp.Notifications;
 using Microsoft.UI.Xaml.Controls;
+using Windows.Storage.Provider;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -74,10 +75,8 @@ namespace UWPDrawingCanvas
             SolidColorBrush defaultForegroundBrush = (SolidColorBrush)Application.Current.Resources["TextFillColorPrimaryBrush"];
             SolidColorBrush inactiveForegroundBrush = (SolidColorBrush)Application.Current.Resources["TextFillColorDisabledBrush"];
 
-            if (e.WindowActivationState == CoreWindowActivationState.Deactivated)
-                AppTitle.Foreground = inactiveForegroundBrush;
-            else
-                AppTitle.Foreground = defaultForegroundBrush;
+            if (e.WindowActivationState == CoreWindowActivationState.Deactivated) AppTitle.Foreground = inactiveForegroundBrush;
+            else AppTitle.Foreground = defaultForegroundBrush;
         }
         private void CustomWidth_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args)
         {
@@ -103,10 +102,12 @@ namespace UWPDrawingCanvas
         {
             IReadOnlyList<InkStroke> currentStrokes = DrawingCanvas.InkPresenter.StrokeContainer.GetStrokes();
             CanvasDevice device = CanvasDevice.GetSharedDevice();
-            CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, SavingHeight, SavingWidth, 96);
-            var SaveDrawing = new FileSavePicker();
-            SaveDrawing.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-            SaveDrawing.SuggestedFileName = "Untitled drawing";
+            CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, (int)DrawingCanvas.ActualWidth, (int)DrawingCanvas.ActualHeight, 96);
+            var SaveDrawing = new FileSavePicker
+            {
+                SuggestedStartLocation = PickerLocationId.PicturesLibrary,
+                SuggestedFileName = "Untitled drawing"
+            };
             if (currentStrokes.Count > 0)
             {
                 // Let users choose their ink file using a file picker.
@@ -126,19 +127,18 @@ namespace UWPDrawingCanvas
                         await DrawingCanvas.InkPresenter.StrokeContainer.SaveAsync(outputStream);
                         await outputStream.FlushAsync();
                     }
-                        /*ContentDialog FileSaved = new ContentDialog()
+                    stream.Dispose();
                     FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
                     if (status == FileUpdateStatus.Complete)
                     {
-                        /*ContentDialog FileSaved = new ContentDialog()
+                        /* ContentDialog FileSaved = new ContentDialog()
                         {
                             Title = "File saved as " + file.Name,
                             CloseButtonText = "Close",
-                        };*/
+                        }; */
                         new ToastContentBuilder()
-                            .AddText("File saved successfully as" + file.Name)
-                            .AddButton(new ToastButton()
-                                .SetContent("Close"));
+                            .AddText("File saved successfully!")
+                            .AddText("Saved as " + file.Name);
                     }
                     else
                     {
@@ -147,12 +147,10 @@ namespace UWPDrawingCanvas
                             Title = "File wasn't saved.",
                             Content="Are you sure you have access to the current path?",
                             CloseButtonText = "Close",
-                        };*/
+                        }; */
                         new ToastContentBuilder()
-                            .AddText("File could not be saved!")
-                            .AddText("Are you sure you have access to the save path?")
-                            .AddButton(new ToastButton()
-                                .SetContent("Close"));
+                            .AddText("Failed to save file")
+                            .AddText("Are you sure you have access to the current path?");
                     }
                 }
                 // User selects Cancel and picker returns null.
@@ -163,11 +161,9 @@ namespace UWPDrawingCanvas
                     {
                         Title = "Operation cancelled by user.",
                         CloseButtonText = "Close",
-                    };*/
+                    }; */
                     new ToastContentBuilder()
-                            .AddText("Saving file cancelled by user.")
-                            .AddButton(new ToastButton()
-                                .SetContent("Close"));
+                        .AddText("Operation cancelled by user");
                 }
             }
         }
@@ -186,18 +182,6 @@ namespace UWPDrawingCanvas
         private void SettingsClick(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(Settings));
-        }
-        private void CustomHeight_OnBeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
-        {
-            args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
-        }
-        private void CustomHeight_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args)
-        {
-            sender.Text = new String(sender.Text.Where(char.IsDigit).ToArray());
-        }
-        private void CustomWidth_OnBeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
-        {
-            args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
         }
     }
 }

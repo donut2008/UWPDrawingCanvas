@@ -9,28 +9,6 @@
     xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     controls:BackdropMaterial.ApplyToRootOrPageBackground="True">
     <Page.Resources>
-        <!-- Add the custom CalligraphicPen to the page resources. -->
-        <local:CalligraphicPen x:Key="CalligraphicPen" />
-        <!-- Specify the colors for the palette of the custom pen. -->
-        <BrushCollection x:Key="CalligraphicPenPalette">
-            <SolidColorBrush Color="Blue" />
-            <SolidColorBrush Color="Red" />
-            <SolidColorBrush Color="Black"/>
-            <SolidColorBrush Color="Chocolate"/>
-            <SolidColorBrush Color="Cyan"/>
-            <SolidColorBrush Color="Olive"/>
-            <SolidColorBrush Color="White"/>
-            <SolidColorBrush Color="Green"/>
-            <SolidColorBrush Color="Lime"/>
-            <SolidColorBrush Color="Orange"/>
-            <SolidColorBrush Color="Yellow"/>
-            <SolidColorBrush Color="YellowGreen"/>
-            <SolidColorBrush Color="GreenYellow"/>
-            <SolidColorBrush Color="Pink"/>
-            <SolidColorBrush Color="Purple"/>
-            <SolidColorBrush Color="Gray"/>
-            <SolidColorBrush Color="LightGray"/>
-        </BrushCollection>
         <!--This top margin is the height of the custom TitleBar-->
         <Thickness x:Key="NavigationViewContentMargin">0,48,0,0</Thickness>
         <!-- Add the custom CalligraphicPen to the page resources. -->
