@@ -101,7 +101,7 @@
             </ContentDialog.Content>
         </ContentDialog>
         <Grid Margin="0,85,0,0" Background="{ThemeResource SystemBaseLowColor}" CornerRadius="8">
-            <InkCanvas x:Name="DrawingCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></InkCanvas>
+            <InkCanvas x:Name="DrawingCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:FieldModifier="public"></InkCanvas>
         </Grid>
     </Grid>
 </Page>

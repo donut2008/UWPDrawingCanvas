@@ -45,12 +45,13 @@ namespace UWPDrawingCanvas
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             if (this.Frame.CanGoBack)
-                this.Frame.Navigate(typeof(MainPage));
+                this.Frame.GoBack();
             else
             {
                 ContentDialog NavigationError = new ContentDialog() {
-                Title="Failed to go to previous page",
-                Content="No page to navigate to in navigation cache"
+                    Title = "Failed to go to previous page",
+                    Content = "No page to navigate to in navigation cache",
+                    CloseButtonText = "Close"
                 };
             }
         }

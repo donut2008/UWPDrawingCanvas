@@ -1,0 +1,33 @@
+﻿<ContentDialog
+    x:Class="UWPDrawingCanvas.FileSizePicker"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:UWPDrawingCanvas"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Pick export size"
+    PrimaryButtonText="Export"
+    SecondaryButtonText="Cancel"
+    PrimaryButtonClick="FileSizeChosen"
+    SecondaryButtonClick="ExportCancelled">
+    <ContentDialog.Content>
+        <StackPanel Orientation="Vertical">
+            <ComboBox x:Name="DefaultSizePicker" SelectedIndex="2" SelectionChanged="DefaultSizeChanged">
+                <x:String>4320p (7680x4230)</x:String>
+                <x:String>2160p (3840x2160)</x:String>
+                <x:String>1080p (1920x1080)</x:String>
+                <x:String>720p (1280x720)</x:String>
+                <x:String>540p (960x540)</x:String>
+            </ComboBox>
+            <StackPanel Orientation="Horizontal">
+                <CheckBox Checked="ComboBoxGone" Unchecked="ComboBoxVisible"/>
+                <TextBlock Style="{StaticResource BodyTextBlockStyle}">Use a custom size (may break some drawings!)</TextBlock>
+            </StackPanel>
+            <TextBox x:Name="CustomHeight" BeforeTextChanging="CustomHeight_OnBeforeTextChanging" TextChanging="CustomHeight_TextChanging"/>
+            <TextBlock>x</TextBlock>
+            <TextBox x:Name="CustomWidth" BeforeTextChanging="CustomWidth_OnBeforeTextChanging" TextChanging="CustomWidth_TextChanging"/>
+            <Button x:Name="CustomSizeSelected" Content="Done" Click="CustomSizeSelected_Click"/>
+        </StackPanel>
+    </ContentDialog.Content>
+</ContentDialog>
