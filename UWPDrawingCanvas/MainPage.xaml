@@ -77,13 +77,10 @@
                 </Button>
             </StackPanel>
         </StackPanel>
-        <ContentDialog x:Name="FileSizePicker" CloseButtonClick="SizeCancelled" PrimaryButtonClick="FileSizeChosen">
-            <ContentDialog.Title>
-                <TextBlock>Pick file size</TextBlock>
-            </ContentDialog.Title>
+        <ContentDialog x:Name="FileSizePicker" Title="Pick export size" PrimaryButtonText="Export" SecondaryButtonText="Cancel" PrimaryButtonClick="FileSizeChosen" SecondaryButtonClick="ExportCancelled">
             <ContentDialog.Content>
                 <StackPanel Orientation="Vertical">
-                    <ComboBox>
+                    <ComboBox x:Name="DefaultSizePicker" SelectedIndex="2" SelectionChanged="DefaultSizeChanged">
                         <x:String>4320p (7680x4230)</x:String>
                         <x:String>2160p (3840x2160)</x:String>
                         <x:String>1080p (1920x1080)</x:String>
@@ -94,9 +91,10 @@
                         <CheckBox Checked="ComboBoxGone" Unchecked="ComboBoxVisible"/>
                         <TextBlock Style="{StaticResource BodyTextBlockStyle}">Use a custom size (may break some drawings!)</TextBlock>
                     </StackPanel>
-                    <TextBox x:Name="CustomHeight" BeforeTextChanging="CustomHeight_OnBeforeTextChanging" TextChanging="CustomHeight_TextChanging"/>
-                    <TextBlock>x</TextBlock>
-                    <TextBox x:Name="CustomWidth" BeforeTextChanging="CustomWidth_OnBeforeTextChanging" TextChanging="CustomWidth_TextChanging"/>
+                    <TextBox x:Name="CustomHeight" BeforeTextChanging="CustomHeight_OnBeforeTextChanging" TextChanging="CustomHeight_TextChanging" PlaceholderText="0"/>
+                    <TextBlock> x </TextBlock>
+                    <TextBox x:Name="CustomWidth" BeforeTextChanging="CustomWidth_OnBeforeTextChanging" TextChanging="CustomWidth_TextChanging" PlaceholderText="0"/>
+                    <Button x:Name="CustomSizeSelected" Content="Done" Click="CustomSizeSelected_Click"/>
                 </StackPanel>
             </ContentDialog.Content>
         </ContentDialog>
