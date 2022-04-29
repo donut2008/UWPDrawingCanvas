@@ -41,6 +41,7 @@ namespace UWPDrawingCanvas
             coreTitleBar.IsVisibleChanged += CoreTitleBar_IsVisibleChanged;
             Window.Current.Activated += Current_Activated;
             NavigationCacheMode = NavigationCacheMode.Enabled;
+            SystemInfo.Text=Environment.OSVersion.Version.ToString();
         }
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
@@ -102,5 +103,6 @@ namespace UWPDrawingCanvas
                 AppTitle.Foreground = defaultForegroundBrush;
             }
         }
+        
     }
 }

@@ -69,10 +69,11 @@
                 <controls:Expander.Content>
                     <StackPanel>
                         <TextBlock FontSize="16">A UWP drawing canvas.</TextBlock>
-                        <TextBlock FontSize="12" Foreground="{ThemeResource SystemBaseMediumColor}">Build info: 2.5 build 95, canary channel</TextBlock>
+                        <TextBlock FontSize="12" Foreground="{ThemeResource SystemBaseMediumColor}">Build info: 2.5 build 97, canary channel</TextBlock>
                     </StackPanel>
                 </controls:Expander.Content>
             </controls:Expander>
+            <TextBlock x:Name="SystemInfo" FontSize="9" Foreground="{ThemeResource SystemBaseMediumColor}"/>
         </StackPanel>
     </Grid>
 </Page>
