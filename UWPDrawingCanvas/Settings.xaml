@@ -11,32 +11,36 @@
     <Grid>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal" Margin="5" Spacing="5">
-                <Button x:Name="BackButton" 
-                        HorizontalAlignment="Left" 
-                        VerticalAlignment="Top"
-                        ToolTipService.ToolTip="Back"
-                        Click="BackButton_Click">
+                <Button x:Name="BackButton"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    ToolTipService.ToolTip="Back"
+                    Click="BackButton_Click"
+                    CornerRadius="4"
+                    BorderBrush="{ThemeResource SystemBaseLowColor}"
+                    BorderThickness="1">
                     <SymbolIcon Symbol="Back"/>
                 </Button>
                 <Border x:Name="AppTitleBar"
-                IsHitTestVisible="True"
-                VerticalAlignment="Top"
-                Background="Transparent"
-                Height="40"
-                Canvas.ZIndex="1" 
-                Margin="16,8,0,0">
-                    <StackPanel Orientation="Horizontal">
+                    IsHitTestVisible="True"
+                    VerticalAlignment="Top"
+                    Background="Transparent"
+                    Height="40"
+                    Canvas.ZIndex="1" 
+                    Margin="16,8,0,0"
+                    HorizontalAlignment="Stretch">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
                         <Image x:Name="AppFontIcon"
-                    HorizontalAlignment="Left" 
-                    VerticalAlignment="Top"
-                    Source="Assets/Square44x44Logo.png" 
-                    Width="16" 
-                    Height="16"/>
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Top"
+                            Source="Assets/Square44x44Logo.png" 
+                            Width="16" 
+                            Height="16"/>
                         <TextBlock x:Name="AppTitle"
-                    Text="Drawing Canvas"
-                    VerticalAlignment="Top"
-                    Margin="12, 0, 0, 0"
-                    Style="{StaticResource CaptionTextBlockStyle}" />
+                            Text="Drawing Canvas"
+                            VerticalAlignment="Top"
+                            Margin="12, 0, 0, 0"
+                            Style="{StaticResource CaptionTextBlockStyle}" />
                     </StackPanel>
                 </Border>
             </StackPanel>
@@ -69,7 +73,7 @@
                 <controls:Expander.Content>
                     <StackPanel>
                         <TextBlock FontSize="16">A UWP drawing canvas.</TextBlock>
-                        <TextBlock FontSize="12" Foreground="{ThemeResource SystemBaseMediumColor}">Build info: 2.5 build 97, canary channel</TextBlock>
+                        <TextBlock FontSize="12" Foreground="{ThemeResource SystemBaseMediumColor}">Build info: 2.5 build 99, canary channel</TextBlock>
                     </StackPanel>
                 </controls:Expander.Content>
             </controls:Expander>

@@ -83,79 +83,25 @@ namespace UWPDrawingCanvas
         {
             new ToastContentBuilder().AddText("Saving cancelled");
         }
-        private async void FileSizeChosen(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private void FileSizeChosen(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             if (CustomHeight.IsEnabled && CustomWidth.IsEnabled)
             {
                 SavingHeight = int.Parse(CustomHeight.Text);
                 SavingWidth = int.Parse(CustomWidth.Text);
+                Save();
             }
             else
             {
-                IReadOnlyList<InkStroke> currentStrokes = DrawingCanvas.InkPresenter.StrokeContainer.GetStrokes();
-                CanvasDevice device = CanvasDevice.GetSharedDevice();
-                CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, SavingWidth, SavingHeight, 96);
-                var SaveDrawing = new FileSavePicker
+                int DSPIndex = DefaultSizePicker.SelectedIndex;
+                switch (DSPIndex)
                 {
-                    SuggestedStartLocation = PickerLocationId.PicturesLibrary,
-                    SuggestedFileName = "Untitled drawing"
-                };
-                if (currentStrokes.Count > 0)
-                {
-                    // Let users choose their ink file using a file picker.
-                    // Initialize the picker.
-                    FileSavePicker savePicker = new FileSavePicker();
-                    savePicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-                    savePicker.FileTypeChoices.Add("Portable Network Graphics Image", new List<string>() { ".png" });
-                    savePicker.DefaultFileExtension = ".png";
-                    savePicker.SuggestedFileName = "Untitled drawing";
-                    StorageFile file = await savePicker.PickSaveFileAsync();
-                    if (file != null)
-                    {
-                        CachedFileManager.DeferUpdates(file);
-                        IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite);
-                        using (IOutputStream outputStream = stream.GetOutputStreamAt(0))
-                        {
-                            await DrawingCanvas.InkPresenter.StrokeContainer.SaveAsync(outputStream);
-                            await outputStream.FlushAsync();
-                        }
-                        stream.Dispose();
-                        FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
-                        if (status == FileUpdateStatus.Complete)
-                        {
-                            // ContentDialog FileSaved = new ContentDialog()
-                            // {
-                            //  Title = "File saved as " + file.Name,
-                            //  CloseButtonText = "Close",
-                            // }; 
-                            new ToastContentBuilder()
-                                .AddText("File saved successfully!")
-                                .AddText("Saved as " + file.Name);
-                        }
-                        else
-                        {
-                            // ContentDialog FileNotSaved = new ContentDialog()
-                            // {
-                            //  Title = "File wasn't saved.",
-                            //  Content="Are you sure you have access to the current path?",
-                            //  CloseButtonText = "Close",
-                        };
-                        new ToastContentBuilder()
-                            .AddText("Failed to save file")
-                            .AddText("Are you sure you have access to the current path?");
-                    }
-                }
-                // User selects Cancel and picker returns null.
-                else
-                {
-                    // Operation cancelled.
-                    // ContentDialog FileSaveCancelled = new ContentDialog()
-                    //{
-                    //  Title = "Operation cancelled by user.",
-                    //  CloseButtonText = "Close",
-                    // };
-                    new ToastContentBuilder()
-                        .AddText("Operation cancelled by user");
+                    case 0: SavingHeight = 7680; SavingWidth = 4320; break;
+                    case 1: SavingHeight = 3840; SavingWidth = 2160; break;
+                    case 2: SavingHeight = 1920; SavingWidth = 1080; break;
+                    case 3: SavingHeight = 1280; SavingWidth = 720; break;
+                    case 4: SavingHeight = 960; SavingWidth = 540; break;
+                    default: SavingHeight = 0; SavingWidth = 0; break;
                 }
             }
         }
@@ -213,6 +159,74 @@ namespace UWPDrawingCanvas
         private void SettingsClick(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(Settings));
+        }
+        private async void Save()
+        {
+            IReadOnlyList<InkStroke> currentStrokes = DrawingCanvas.InkPresenter.StrokeContainer.GetStrokes();
+            CanvasDevice device = CanvasDevice.GetSharedDevice();
+            CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, SavingWidth, SavingHeight, 96);
+            var SaveDrawing = new FileSavePicker
+            {
+                SuggestedStartLocation = PickerLocationId.PicturesLibrary,
+                SuggestedFileName = "Untitled drawing"
+            };
+            if (currentStrokes.Count > 0)
+            {
+                // Let users choose their ink file using a file picker.
+                // Initialize the picker.
+                FileSavePicker savePicker = new FileSavePicker();
+                savePicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+                savePicker.FileTypeChoices.Add("Portable Network Graphics Image", new List<string>() { ".png" });
+                savePicker.DefaultFileExtension = ".png";
+                savePicker.SuggestedFileName = "Untitled drawing";
+                StorageFile file = await savePicker.PickSaveFileAsync();
+                if (file != null)
+                {
+                    CachedFileManager.DeferUpdates(file);
+                    IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite);
+                    using (IOutputStream outputStream = stream.GetOutputStreamAt(0))
+                    {
+                        await DrawingCanvas.InkPresenter.StrokeContainer.SaveAsync(outputStream);
+                        await outputStream.FlushAsync();
+                    }
+                    stream.Dispose();
+                    FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
+                    if (status == FileUpdateStatus.Complete)
+                    {
+                        // ContentDialog FileSaved = new ContentDialog()
+                        // {
+                        //  Title = "File saved as " + file.Name,
+                        //  CloseButtonText = "Close",
+                        // }; 
+                        new ToastContentBuilder()
+                            .AddText("File saved successfully!")
+                            .AddText("Saved as " + file.Name);
+                    }
+                    else
+                    {
+                        // ContentDialog FileNotSaved = new ContentDialog()
+                        // {
+                        //  Title = "File wasn't saved.",
+                        //  Content="Are you sure you have access to the current path?",
+                        //  CloseButtonText = "Close",
+                    };
+                    new ToastContentBuilder()
+                        .AddText("Failed to save file")
+                        .AddText("Are you sure you have access to the current path?");
+                }
+            }
+            // User selects Cancel and picker returns null.
+            else
+            {
+                // Operation cancelled.
+                // ContentDialog FileSaveCancelled = new ContentDialog()
+                //{
+                //  Title = "Operation cancelled by user.",
+                //  CloseButtonText = "Close",
+                // };
+                new ToastContentBuilder()
+                    .AddText("Operation cancelled by user");
+            }
         }
     }
 }
