@@ -101,7 +101,7 @@
                 </StackPanel>
             </ContentDialog.Content>
         </ContentDialog>
-        <Grid Margin="0,84,0,0" Background="{ThemeResource SystemBaseLowColor}">
+        <Grid Margin="0,92,0,0" Background="{ThemeResource SystemBaseLowColor}">
             <InkCanvas x:Name="DrawingCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:FieldModifier="public"></InkCanvas>
         </Grid>
     </Grid>

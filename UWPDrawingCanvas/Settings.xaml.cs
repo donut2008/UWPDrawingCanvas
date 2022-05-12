@@ -31,7 +31,6 @@ namespace UWPDrawingCanvas
         {
             this.InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Enabled;
-            SystemInfo.Text = "OS build " + Environment.OSVersion.Version.ToString();
         }
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
