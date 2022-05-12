@@ -9,8 +9,6 @@
     xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     controls:BackdropMaterial.ApplyToRootOrPageBackground="True">
     <Page.Resources>
-        <!--This top margin is the height of the custom TitleBar-->
-        <Thickness x:Key="NavigationViewContentMargin">0,48,0,0</Thickness>
         <!-- Add the custom CalligraphicPen to the page resources. -->
         <local:CalligraphicPen x:Key="CalligraphicPen" />
         <!-- Specify the colors for the palette of the custom pen. -->
@@ -40,20 +38,23 @@
                 VerticalAlignment="Top"
                 Background="Transparent"
                 Height="40"
-                Canvas.ZIndex="1" 
-                Margin="16,8,0,0">
+                Canvas.ZIndex="1"
+                Margin="16,8,0,0"
+                HorizontalAlignment="Stretch">
                 <StackPanel Orientation="Horizontal">
                     <Image x:Name="AppFontIcon"
-                    HorizontalAlignment="Left" 
+                    HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Source="Assets/Square44x44Logo.png" 
                     Width="16" 
-                    Height="16"/>
+                    Height="16"
+                    IsHitTestVisible="True"/>
                     <TextBlock x:Name="AppTitle"
                     Text="Drawing Canvas"
                     VerticalAlignment="Top"
                     Margin="12, 0, 0, 0"
-                    Style="{StaticResource CaptionTextBlockStyle}" />
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    IsHitTestVisible="True"/>
                 </StackPanel>
             </Border>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5">
@@ -79,7 +80,7 @@
         </StackPanel>
         <ContentDialog x:Name="FileSizePicker" Title="Pick export size" PrimaryButtonText="Export" SecondaryButtonText="Cancel" PrimaryButtonClick="FileSizeChosen" SecondaryButtonClick="ExportCancelled">
             <ContentDialog.Content>
-                <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Vertical" Spacing="5">
                     <ComboBox x:Name="DefaultSizePicker" SelectedIndex="2" SelectionChanged="DefaultSizeChanged">
                         <x:String>4320p (7680x4230)</x:String>
                         <x:String>2160p (3840x2160)</x:String>
@@ -91,14 +92,16 @@
                         <CheckBox Checked="ComboBoxGone" Unchecked="ComboBoxVisible"/>
                         <TextBlock Style="{StaticResource BodyTextBlockStyle}">Use a custom size (may break some drawings!)</TextBlock>
                     </StackPanel>
-                    <TextBox x:Name="CustomHeight" BeforeTextChanging="CustomHeight_OnBeforeTextChanging" TextChanging="CustomHeight_TextChanging" PlaceholderText="0"/>
-                    <TextBlock> x </TextBlock>
-                    <TextBox x:Name="CustomWidth" BeforeTextChanging="CustomWidth_OnBeforeTextChanging" TextChanging="CustomWidth_TextChanging" PlaceholderText="0"/>
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <TextBox x:Name="CustomHeight" VerticalAlignment="Center" BeforeTextChanging="CustomHeight_OnBeforeTextChanging" TextChanging="CustomHeight_TextChanging" PlaceholderText="0"/>
+                        <TextBlock VerticalAlignment="Center">x</TextBlock>
+                        <TextBox x:Name="CustomWidth" VerticalAlignment="Center" BeforeTextChanging="CustomWidth_OnBeforeTextChanging" TextChanging="CustomWidth_TextChanging" PlaceholderText="0"/>
+                    </StackPanel>
                     <Button x:Name="CustomSizeSelected" Content="Done" Click="CustomSizeSelected_Click"/>
                 </StackPanel>
             </ContentDialog.Content>
         </ContentDialog>
-        <Grid Margin="0,85,0,0" Background="{ThemeResource SystemBaseLowColor}" CornerRadius="8">
+        <Grid Margin="0,84,0,0" Background="{ThemeResource SystemBaseLowColor}">
             <InkCanvas x:Name="DrawingCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:FieldModifier="public"></InkCanvas>
         </Grid>
     </Grid>

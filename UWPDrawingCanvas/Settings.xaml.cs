@@ -30,18 +30,8 @@ namespace UWPDrawingCanvas
         public Settings()
         {
             this.InitializeComponent();
-            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            titleBar.ButtonBackgroundColor = Colors.Transparent;
-            titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
-            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-            coreTitleBar.ExtendViewIntoTitleBar = true;
-            UpdateTitleBarLayout(coreTitleBar);
-            Window.Current.SetTitleBar(AppTitleBar);
-            coreTitleBar.LayoutMetricsChanged += CoreTitleBar_LayoutMetricsChanged;
-            coreTitleBar.IsVisibleChanged += CoreTitleBar_IsVisibleChanged;
-            Window.Current.Activated += Current_Activated;
             NavigationCacheMode = NavigationCacheMode.Enabled;
-            SystemInfo.Text=Environment.OSVersion.Version.ToString();
+            SystemInfo.Text = "OS build " + Environment.OSVersion.Version.ToString();
         }
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
@@ -68,41 +58,5 @@ namespace UWPDrawingCanvas
         {
             (Window.Current.Content as FrameworkElement).RequestedTheme = ElementTheme.Default;
         }
-        private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
-        {
-            UpdateTitleBarLayout(sender);
-        }
-        private void UpdateTitleBarLayout(CoreApplicationViewTitleBar coreTitleBar)
-        {
-            AppTitleBar.Height = coreTitleBar.Height;
-            Thickness currMargin = AppTitleBar.Margin;
-            AppTitleBar.Margin = new Thickness(currMargin.Left, currMargin.Top, coreTitleBar.SystemOverlayRightInset, currMargin.Bottom);
-        }
-        private void CoreTitleBar_IsVisibleChanged(CoreApplicationViewTitleBar sender, object args)
-        {
-            if (sender.IsVisible)
-            {
-                AppTitleBar.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                AppTitleBar.Visibility = Visibility.Collapsed;
-            }
-        }
-        private void Current_Activated(object sender, Windows.UI.Core.WindowActivatedEventArgs e)
-        {
-            SolidColorBrush defaultForegroundBrush = (SolidColorBrush)Application.Current.Resources["TextFillColorPrimaryBrush"];
-            SolidColorBrush inactiveForegroundBrush = (SolidColorBrush)Application.Current.Resources["TextFillColorDisabledBrush"];
-
-            if (e.WindowActivationState == Windows.UI.Core.CoreWindowActivationState.Deactivated)
-            {
-                AppTitle.Foreground = inactiveForegroundBrush;
-            }
-            else
-            {
-                AppTitle.Foreground = defaultForegroundBrush;
-            }
-        }
-        
     }
 }

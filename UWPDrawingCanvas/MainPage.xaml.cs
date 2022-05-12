@@ -40,44 +40,10 @@ namespace UWPDrawingCanvas
         public MainPage()
         {
             this.InitializeComponent();
-            DrawingCanvas.InkPresenter.InputDeviceTypes = CoreInputDeviceTypes.Mouse | CoreInputDeviceTypes.Touch | CoreInputDeviceTypes.Pen;
-            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            titleBar.ButtonBackgroundColor = Colors.Transparent;
-            titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
-            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-            coreTitleBar.ExtendViewIntoTitleBar = true;
-            UpdateTitleBarLayout(coreTitleBar);
-            Window.Current.SetTitleBar(AppTitleBar);
-            coreTitleBar.LayoutMetricsChanged += CoreTitleBar_LayoutMetricsChanged;
-            coreTitleBar.IsVisibleChanged += CoreTitleBar_IsVisibleChanged;
-            Window.Current.Activated += Current_Activated;
             NavigationCacheMode = NavigationCacheMode.Enabled;
             InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
             DrawingCanvas.InkPresenter.UpdateDefaultDrawingAttributes(drawingAttributes);
             CustomHeight.IsEnabled = false; CustomWidth.IsEnabled = false;
-        }
-        private void CoreTitleBar_LayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
-        {
-            UpdateTitleBarLayout(sender);
-        }
-        private void UpdateTitleBarLayout(CoreApplicationViewTitleBar coreTitleBar)
-        {
-            AppTitleBar.Height = coreTitleBar.Height;
-            Thickness currMargin = AppTitleBar.Margin;
-            AppTitleBar.Margin = new Thickness(currMargin.Left, currMargin.Top, coreTitleBar.SystemOverlayRightInset, currMargin.Bottom);
-        }
-        private void CoreTitleBar_IsVisibleChanged(CoreApplicationViewTitleBar sender, object args)
-        {
-            if (sender.IsVisible) AppTitleBar.Visibility = Visibility.Visible;
-            else AppTitleBar.Visibility = Visibility.Collapsed;
-        }
-        private void Current_Activated(object sender, WindowActivatedEventArgs e)
-        {
-            SolidColorBrush defaultForegroundBrush = (SolidColorBrush)Application.Current.Resources["TextFillColorPrimaryBrush"];
-            SolidColorBrush inactiveForegroundBrush = (SolidColorBrush)Application.Current.Resources["TextFillColorDisabledBrush"];
-
-            if (e.WindowActivationState == CoreWindowActivationState.Deactivated) AppTitle.Foreground = inactiveForegroundBrush;
-            else AppTitle.Foreground = defaultForegroundBrush;
         }
         private void SizeCancelled(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
@@ -103,6 +69,7 @@ namespace UWPDrawingCanvas
                     case 4: SavingHeight = 960; SavingWidth = 540; break;
                     default: SavingHeight = 0; SavingWidth = 0; break;
                 }
+                Save();
             }
         }
         private void ComboBoxGone(object sender, RoutedEventArgs e)
