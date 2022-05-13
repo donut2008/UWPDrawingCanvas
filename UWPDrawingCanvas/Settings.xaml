@@ -10,30 +10,6 @@
     controls:BackdropMaterial.ApplyToRootOrPageBackground="True">
     <Grid>
         <StackPanel Orientation="Vertical">
-            <StackPanel Orientation="Horizontal">
-                <Border x:Name="AppTitleBar"
-                    IsHitTestVisible="True"
-                    VerticalAlignment="Top"
-                    Background="Transparent"
-                    Height="40"
-                    Margin="16,8,0,0"
-                    HorizontalAlignment="Stretch">
-                    <StackPanel Orientation="Horizontal">
-                        <Image x:Name="AppFontIcon"
-                            HorizontalAlignment="Left" 
-                            VerticalAlignment="Top"
-                            Source="Assets/Square44x44Logo.png" 
-                            Width="16" 
-                            Height="16"/>
-                        <TextBlock x:Name="AppTitle"
-                            Text="Drawing Canvas"
-                            VerticalAlignment="Top"
-                            HorizontalTextAlignment="Left"
-                            Margin="12, 0, 0, 0"
-                            Style="{StaticResource CaptionTextBlockStyle}"/>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
             <StackPanel Orientation="Horizontal" Spacing="5" Margin="8,0,8,8">
                 <Button x:Name="BackButton"
                     HorizontalAlignment="Left"
