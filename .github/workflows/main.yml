@@ -1,0 +1,33 @@
+name: Build
+
+on:
+  push:
+    branches: [ "stable" ]
+  pull_request:
+    branches: [ "stable" ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get Certificate from secret
+        env: 
+          encoded_cert: ${{ secrets.encoded_cert }}
+          cert_password: ${{ secrets.cert_password }}
+      - run: |
+          [System.IO.File]::WriteAllBytes("$pwd\cert.pfx", [Convert]::FromBase64String($env:encoded_cert))
+          
+      - name: Build Project
+        run: |
+          msbuild /t:build -restore UWPDrawingCanvas.sln /p:Platform="x64|arm64" /p:Configuration="Release" /p:AppxBundle="Always" /p:AppxBundlePlatforms="x64|arm64" /p:AppxPackageDir="$pwd\build" /p:UapAppxPackageBuildMode="SideloadOnly" /p:AppxPackageSigningEnabled="true" /p:PackageCertificateThumbprint="" /p:PackageCertificateKeyFile="$pwd\cert.pfx" /p:PackageCertificatePassword=$env:cert_password
+          
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2.2.4
+        with:
+          name: calculator
+          path: build\*_Test\*
